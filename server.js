@@ -76,10 +76,10 @@ app.post("/register", (req, res) => {
         return res.render("homepage", {errors})
     }
     // save new user into a db
-        
-
+      const myStatement = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)")
+        myStatement.run(req.body.username, req.body.password)
     // log user in by giving cookie
-    
+    res.send("thank you")
 })
 
 
