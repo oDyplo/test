@@ -1,5 +1,8 @@
 const express = require("express")
-const db = require("better-sqlite3")("myApp.db")
+const path = require("path")
+const bcrpyt = require("bcrypt")
+const session = require("express-session")
+const db = require("better-sqlite3")(path.join(__dirname, "myApp.db"))
 db.pragma("journal_mode = WAL")
 
 //db setup
@@ -25,6 +28,15 @@ const app = express()
 app.set("view engine", "ejs")
 app.use(express.urlencoded({extended: false}))
 app.use(express.static("public"))
+
+app.use(
+    session({
+        secret: "myApp",
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false }, // Set to `true` in production with HTTPS
+    })
+);
 
 app.use(function (req, res, next) {
     res.locals.errors = []
@@ -64,7 +76,7 @@ app.post("/register", (req, res) => {
         return res.render("homepage", {errors})
     }
     // save new user into a db
-
+        
 
     // log user in by giving cookie
     
